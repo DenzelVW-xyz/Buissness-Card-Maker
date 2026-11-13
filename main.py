@@ -26,10 +26,7 @@ def create_qr_code(data):
     img.save("qrcode.png")
 
 # Create an the background, add the qr code.
-def background_init():
-    Image.new("RGB", (1050, 600), (245, 245, 220)).save("Business_card_Background.png")
-
-background_init()
+Image.new("RGB", (1050, 600), (245, 245, 220)).save("Business_card_Background.png")
 Card_Background = Image.open("Business_card_Background.png")
 create_qr_code(qrcode_data)
 code = Image.open("qrcode.png")
