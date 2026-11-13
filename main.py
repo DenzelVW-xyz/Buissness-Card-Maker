@@ -1,5 +1,5 @@
 import qrcode
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 import os
 
 # Set up Directory
@@ -8,9 +8,9 @@ try:
     os.chdir("Results")
 except FileExistsError:
     os.chdir("Results")
-    
 
-url = input("Please input your full URL: ")
+# User Inputs the URL or data they wanna add to the qrcode
+url = input("Data for QRcode: ")
 
 def create_qr_code(url):
     qr = qrcode.QRCode(
