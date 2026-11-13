@@ -1,5 +1,5 @@
 import qrcode
-from PIL import Image, ImageDraw
+from PIL import Image
 import os
 
 # Set up Directory
@@ -13,7 +13,6 @@ except FileExistsError:
 url = input("Please input your full URL: ")
 
 def create_qr_code(url):
-    
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
