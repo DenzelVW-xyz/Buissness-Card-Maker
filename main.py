@@ -3,6 +3,9 @@ from PIL import Image, ImageDraw, ImageFont
 import os
 
 # Set up Directory
+
+rootdir = os.path.abspath(os.curdir)
+
 try:
     os.mkdir("Results")
     os.chdir("Results")
@@ -11,6 +14,7 @@ except FileExistsError:
 
 # User Inputs the URL or data they wanna add to the qrcode
 qrcode_data = input("Data for QRcode: ")
+card_Title = input("Title of the card: ")
 
 # Function that creates the qrcode and saves it as an image
 def create_qr_code(data):
@@ -26,10 +30,24 @@ def create_qr_code(data):
     img.save("qrcode.png")
 
 # Create an the background, add the qr code.
-Image.new("RGB", (1050, 600), (245, 245, 220)).save("Business_card_Background.png")
-Card_Background = Image.open("Business_card_Background.png")
+Image.new("RGB", (1050, 600), (245, 245, 220)).save("Result.png")
+Card_Background = Image.open("Result.png")
 create_qr_code(qrcode_data)
 code = Image.open("qrcode.png")
+code = code.resize((250, 250))
+Card_Background.paste(code, (0, 0)) # Add qr code
 
-Card_Background.paste(code, (0, 0))
-Card_Background.save("temp.png")
+# Create a title and a dynamically scale to a textbox
+Title = ImageDraw.Draw(Card_Background)
+font_Size = 65
+myFont = ImageFont.truetype(os.path.join(rootdir, "fonts", "Caudex-Bold.ttf"), font_Size)
+Textbox = Title.textbbox(xy=(525, 10), text=card_Title, anchor="mt", font=myFont)
+max_width = 550
+while Title.textlength(text=card_Title, font=myFont) > max_width:
+    font_Size -= 1
+    myFont = ImageFont.truetype(os.path.join(rootdir, "fonts", "Caudex-Bold.ttf"), font_Size)
+Title.text((525, 10), card_Title, fill=(0, 0, 0), font=myFont, anchor="mt") # Add Title
+
+# Save and cleanup
+Card_Background.save("Result.png")
+os.remove("qrcode.png")
