@@ -21,7 +21,7 @@ removeBackground = bool(input("Would you like to remove logo background?\n(Y/N)"
 
 # Prepare Background removal model.
 if removeBackground == True:
-    print("Importing rembg module...")
+    print("Importing rembg module...", flush=True)
     from rembg import remove, new_session
     print("Preparing AI model...", flush=True)
     session = new_session("u2net")
