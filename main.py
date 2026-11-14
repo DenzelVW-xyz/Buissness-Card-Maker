@@ -1,6 +1,6 @@
-import qrcode
+# Import Modules
 from PIL import Image, ImageDraw, ImageFont
-from rembg import remove, new_session
+import qrcode
 import os
 
 # Set up Directory
@@ -21,6 +21,8 @@ removeBackground = bool(input("Would you like to remove logo background?\n(Y/N)"
 
 # Prepare Background removal model.
 if removeBackground == True:
+    print("Importing rembg module...")
+    from rembg import remove, new_session
     print("Preparing AI model...", flush=True)
     session = new_session("u2net")
     print("AI model ready!")
