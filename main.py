@@ -39,25 +39,23 @@ def create_qr_code(data):
     qr.add_data(data)    
     qr.make(fit=True)
     img = qr.make_image(fill_color="black", back_color="beige")
-    img.save("qrcode.png")
+    return img
 
 # Create an the background, add the qr_image.
-Image.new("RGB", (1050, 600), (245, 245, 220)).save("Result.png")
-card_background = Image.open("Result.png").convert("RGBA")
-create_qr_code(qrcode_data)
-qr_image = Image.open("qrcode.png")
+card_background = Image.new("RGBA", (1050, 600), (245, 245, 220))
+qr_image = create_qr_code(qrcode_data)
 qr_image = qr_image.resize((250, 250), Image.Resampling.NEAREST)
 card_background.paste(qr_image, (0, 0)) # Add qr_image
 
 # Create a title and a dynamically scale to a textbox
-Title = ImageDraw.Draw(card_background)
+draw = ImageDraw.Draw(card_background)
 font_size = 65
 font = ImageFont.truetype(os.path.join(root_dir, "fonts", "Caudex-Bold.ttf"), font_size)
 max_width = 550
-while Title.textlength(text=card_title, font=font) > max_width:
+while draw.textlength(text=card_title, font=font) > max_width:
     font_size -= 1
     font = ImageFont.truetype(os.path.join(root_dir, "fonts", "Caudex-Bold.ttf"), font_size)
-Title.text((525, 10), card_title, fill=(0, 0, 0), font=font, anchor="mt") # Add Title
+draw.text((525, 10), card_title, fill=(0, 0, 0), font=font, anchor="mt") # Add draw
 
 # Add Logo to the top right of the card
 try:
@@ -86,4 +84,3 @@ card_background.paste(logo, (x, y), logo)
 
 # Save and cleanup
 card_background.save("Result.png")
-os.remove("qrcode.png")
