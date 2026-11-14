@@ -46,7 +46,7 @@ Image.new("RGB", (1050, 600), (245, 245, 220)).save("Result.png")
 card_background = Image.open("Result.png").convert("RGBA")
 create_qr_code(qrcode_data)
 qr_image = Image.open("qrcode.png")
-qr_image = qr_image.resize((250, 250))
+qr_image = qr_image.resize((250, 250), Image.Resampling.NEAREST)
 card_background.paste(qr_image, (0, 0)) # Add qr_image
 
 # Create a title and a dynamically scale to a textbox
