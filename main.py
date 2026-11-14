@@ -16,8 +16,8 @@ except FileExistsError:
 # Data User inputs
 qrcode_data = input("Data for QRcode: ")
 card_Title = input("Title of the card: ")
-logo = input("Path to your logo")
-removeBackground = bool(input("Would you like to remove logo background?\n Type 1 for yes and 0 for no: "))
+logo = input("Path to your logo: ")
+removeBackground = bool(input("Would you like to remove logo background?\n Type 1 for yes and 0 for no: ").strip() == "1")
 
 # Prepare Background removal model.
 if removeBackground == True:
@@ -64,7 +64,7 @@ logo = logo.resize((250, 250))
 if removeBackground == True:
     print("Removing Logo Background...")
     logo = remove(logo)
-Card_Background.paste(logo, (0, 0), logo)
+Card_Background.paste(logo, (1050, 0), logo)
 
 # Save and cleanup
 Card_Background.save("Result.png")
