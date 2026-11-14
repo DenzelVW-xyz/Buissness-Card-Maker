@@ -1,5 +1,6 @@
 import qrcode
 from PIL import Image, ImageDraw, ImageFont
+from rembg import remove, new_session
 import os
 
 # Set up Directory
@@ -16,6 +17,14 @@ except FileExistsError:
 qrcode_data = input("Data for QRcode: ")
 card_Title = input("Title of the card: ")
 logo = input("Path to your logo")
+removeBackground = bool(input("Would you like to remove logo background?\n Type 1 for yes and 0 for no: "))
+
+# Prepare Background removal model.
+if removeBackground == True:
+    print("Preparing AI model...", flush=True)
+    session = new_session("u2net")
+    print("AI model ready!")
+
 
 # Function that creates the qrcode and saves it as an image
 def create_qr_code(data):
@@ -32,7 +41,7 @@ def create_qr_code(data):
 
 # Create an the background, add the qr code.
 Image.new("RGB", (1050, 600), (245, 245, 220)).save("Result.png")
-Card_Background = Image.open("Result.png")
+Card_Background = Image.open("Result.png").convert("RGBA")
 create_qr_code(qrcode_data)
 code = Image.open("qrcode.png")
 code = code.resize((250, 250))
@@ -50,9 +59,12 @@ while Title.textlength(text=card_Title, font=myFont) > max_width:
 Title.text((525, 10), card_Title, fill=(0, 0, 0), font=myFont, anchor="mt") # Add Title
 
 # Add Logo to the top right of the card
-logo = Image.open(logo)
-logo.resize(250, 250)
-Card_Background.paste(logo, (1050, 0))
+logo = Image.open(logo).convert("RGBA")
+logo = logo.resize((250, 250))
+if removeBackground == True:
+    print("Removing Logo Background...")
+    logo = remove(logo)
+Card_Background.paste(logo, (0, 0), logo)
 
 # Save and cleanup
 Card_Background.save("Result.png")
