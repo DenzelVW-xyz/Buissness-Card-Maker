@@ -67,6 +67,7 @@ except FileNotFoundError:
         logo = Image.open(os.path.join(root_dir, logo)).convert("RGBA")
     except FileNotFoundError:
         print("Image you provided does not exist.")
+        raise SystemExit(1)
 
 
 # Resize while maintaining aspect ratio
