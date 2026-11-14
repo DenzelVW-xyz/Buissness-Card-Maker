@@ -12,9 +12,10 @@ try:
 except FileExistsError:
     os.chdir("Results")
 
-# User Inputs the URL or data they wanna add to the qrcode
+# Data User inputs
 qrcode_data = input("Data for QRcode: ")
 card_Title = input("Title of the card: ")
+logo = input("Path to your logo")
 
 # Function that creates the qrcode and saves it as an image
 def create_qr_code(data):
@@ -47,6 +48,11 @@ while Title.textlength(text=card_Title, font=myFont) > max_width:
     font_Size -= 1
     myFont = ImageFont.truetype(os.path.join(rootdir, "fonts", "Caudex-Bold.ttf"), font_Size)
 Title.text((525, 10), card_Title, fill=(0, 0, 0), font=myFont, anchor="mt") # Add Title
+
+# Add Logo to the top right of the card
+logo = Image.open(logo)
+logo.resize(250, 250)
+Card_Background.paste(logo, (1050, 0))
 
 # Save and cleanup
 Card_Background.save("Result.png")
