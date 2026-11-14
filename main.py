@@ -1,5 +1,6 @@
-import qrcode
+# Import Modules
 from PIL import Image, ImageDraw, ImageFont
+import qrcode
 import os
 
 # Set up Directory
@@ -12,9 +13,20 @@ try:
 except FileExistsError:
     os.chdir("Results")
 
-# User Inputs the URL or data they wanna add to the qrcode
+# Data User inputs
 qrcode_data = input("Data for QRcode: ")
 card_Title = input("Title of the card: ")
+logo = input("Path to your logo: ")
+removeBackground = bool(input("Would you like to remove logo background?\n(Y/N): ").strip().upper() == "Y")
+
+# Prepare Background removal model.
+if removeBackground == True:
+    print("Importing rembg module...", flush=True)
+    from rembg import remove, new_session
+    print("Preparing AI model...", flush=True)
+    session = new_session("u2net")
+    print("AI model ready!")
+
 
 # Function that creates the qrcode and saves it as an image
 def create_qr_code(data):
@@ -31,7 +43,7 @@ def create_qr_code(data):
 
 # Create an the background, add the qr code.
 Image.new("RGB", (1050, 600), (245, 245, 220)).save("Result.png")
-Card_Background = Image.open("Result.png")
+Card_Background = Image.open("Result.png").convert("RGBA")
 create_qr_code(qrcode_data)
 code = Image.open("qrcode.png")
 code = code.resize((250, 250))
@@ -47,6 +59,30 @@ while Title.textlength(text=card_Title, font=myFont) > max_width:
     font_Size -= 1
     myFont = ImageFont.truetype(os.path.join(rootdir, "fonts", "Caudex-Bold.ttf"), font_Size)
 Title.text((525, 10), card_Title, fill=(0, 0, 0), font=myFont, anchor="mt") # Add Title
+
+# Add Logo to the top right of the card
+try:
+    logo = Image.open(logo).convert("RGBA")
+except FileNotFoundError:
+    try:
+        logo = Image.open(os.path.join(rootdir, logo)).convert("RGBA")
+    except FileNotFoundError:
+        print("Image you provided does not exist.")
+
+
+# Resize while maintaining aspect ratio
+logo.thumbnail((250, 250), Image.Resampling.LANCZOS)
+
+if removeBackground:
+    print("Removing Logo Background...")
+    logo = remove(logo, session=session)
+
+# Calculate top-right position dynamically
+x = Card_Background.width - logo.width
+y = 0
+
+# Paste logo
+Card_Background.paste(logo, (x, y), logo)
 
 # Save and cleanup
 Card_Background.save("Result.png")
