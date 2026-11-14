@@ -62,11 +62,20 @@ Title.text((525, 10), card_Title, fill=(0, 0, 0), font=myFont, anchor="mt") # Ad
 
 # Add Logo to the top right of the card
 logo = Image.open(logo).convert("RGBA")
-logo.thumbnail((250, 250))
-if removeBackground == True:
+
+# Resize while maintaining aspect ratio
+logo.thumbnail((250, 250), Image.Resampling.LANCZOS)
+
+if removeBackground:
     print("Removing Logo Background...")
-    logo = remove(logo)
-Card_Background.paste(logo, (800, 0), logo)
+    logo = remove(logo, session=session)
+
+# Calculate top-right position dynamically
+x = Card_Background.width - logo.width
+y = 0
+
+# Paste logo
+Card_Background.paste(logo, (x, y), logo)
 
 # Save and cleanup
 Card_Background.save("Result.png")
