@@ -17,7 +17,7 @@ except FileExistsError:
 qrcode_data = input("Data for QRcode: ")
 card_Title = input("Title of the card: ")
 logo = input("Path to your logo: ")
-removeBackground = bool(input("Would you like to remove logo background?\n(Y/N)").strip() == "Y")
+removeBackground = bool(input("Would you like to remove logo background?\n(Y/N): ").strip().upper() == "Y")
 
 # Prepare Background removal model.
 if removeBackground == True:
@@ -62,7 +62,7 @@ Title.text((525, 10), card_Title, fill=(0, 0, 0), font=myFont, anchor="mt") # Ad
 
 # Add Logo to the top right of the card
 logo = Image.open(logo).convert("RGBA")
-logo = logo.resize((250, 250))
+logo.thumbnail((250, 250))
 if removeBackground == True:
     print("Removing Logo Background...")
     logo = remove(logo)
