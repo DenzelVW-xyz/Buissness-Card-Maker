@@ -61,7 +61,14 @@ while Title.textlength(text=card_Title, font=myFont) > max_width:
 Title.text((525, 10), card_Title, fill=(0, 0, 0), font=myFont, anchor="mt") # Add Title
 
 # Add Logo to the top right of the card
-logo = Image.open(logo).convert("RGBA")
+try:
+    logo = Image.open(logo).convert("RGBA")
+except FileNotFoundError:
+    try:
+        logo = Image.open(os.path.join(rootdir, logo)).convert("RGBA")
+    except FileNotFoundError:
+        print("Image you provided does not exist.")
+
 
 # Resize while maintaining aspect ratio
 logo.thumbnail((250, 250), Image.Resampling.LANCZOS)
