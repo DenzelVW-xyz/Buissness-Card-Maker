@@ -17,7 +17,7 @@ except FileExistsError:
 qrcode_data = input("Data for QRcode: ")
 card_title = input("Title of the card: ")
 logo = input("Path to your logo: ")
-remove_background = bool(input("Would you like to remove logo background?\n(Y/N): ").strip().upper() == "Y")
+remove_background = input("Would you like to remove logo background?\n(Y/N): ").strip().upper() == "Y"
 
 # Prepare Background removal model.
 if remove_background == True:
